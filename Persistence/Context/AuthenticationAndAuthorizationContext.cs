@@ -15,6 +15,10 @@ namespace Persistence.Context
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<UsersRole> UsersRoles { get; set; }
+
         public AuthenticationAndAuthorizationContext(DbContextOptions<AuthenticationAndAuthorizationContext> options) : base(options)
         {
             Database.EnsureCreated();
@@ -25,6 +29,11 @@ namespace Persistence.Context
             modelBuilder = DataSeederUsers.SeedData(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
         }
     }
 }

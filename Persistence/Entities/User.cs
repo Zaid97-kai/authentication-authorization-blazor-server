@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Persistence.Entities
 {
@@ -15,5 +16,8 @@ namespace Persistence.Entities
         public int Age { get; set; }
 
         public bool IsPremiumMember { get; set; }
+
+        [JsonIgnore]
+        public virtual List<UsersRole>? UsersRoles { get; set; }
     }
 }

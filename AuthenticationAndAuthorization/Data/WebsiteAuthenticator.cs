@@ -6,19 +6,18 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Persistence.Entities;
 using Persistence.Context;
+using System.Collections.Generic;
 
 namespace AuthenticationAndAuthorization.Data
 {
     public class WebsiteAuthenticator : AuthenticationStateProvider
     {
         private readonly ProtectedLocalStorage _protectedLocalStorage;
-        private readonly SimulatedDataProviderService _dataProviderService;
         private readonly IAuthenticationAndAuthorizationContext _context;
 
-        public WebsiteAuthenticator(ProtectedLocalStorage protectedLocalStorage, SimulatedDataProviderService dataProviderService, IAuthenticationAndAuthorizationContext context)
+        public WebsiteAuthenticator(ProtectedLocalStorage protectedLocalStorage, IAuthenticationAndAuthorizationContext context)
         {
             _protectedLocalStorage = protectedLocalStorage;
-            _dataProviderService = dataProviderService;
             _context = context;
         }
 
@@ -26,8 +25,8 @@ namespace AuthenticationAndAuthorization.Data
         {
             var principal = new ClaimsPrincipal();
 
-            try
-            {
+            //try
+            //{
                 var storedPrincipal = await _protectedLocalStorage.GetAsync<string>("identity");
 
                 if (storedPrincipal.Success)
@@ -41,11 +40,11 @@ namespace AuthenticationAndAuthorization.Data
                         principal = new(identity);
                     }
                 }
-            }
-            catch
-            {
+            //}
+            //catch
+            //{
 
-            }
+            //}
 
             return new AuthenticationState(principal);
         }
@@ -59,7 +58,8 @@ namespace AuthenticationAndAuthorization.Data
             {
                 var identity = CreateIdentityFromUser(userInDatabase);
                 principal = new ClaimsPrincipal(identity);
-                await _protectedLocalStorage.SetAsync("identity", JsonConvert.SerializeObject(userInDatabase));
+                var ret = JsonConvert.SerializeObject(userInDatabase);
+                await _protectedLocalStorage.SetAsync("identity", ret);
             }
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(principal)));
@@ -82,8 +82,8 @@ namespace AuthenticationAndAuthorization.Data
                 new ("IsPremiumMember", user.IsPremiumMember.ToString())
             }, "BlazorSchool");
 
-            var roles = _dataProviderService.GetUserRoles(user);
-
+            var roles = _context.UsersRoles.Where(i => i.UserId == user.Id).Select(i => i.Role.Name).ToList();
+                                 
             foreach (string role in roles)
             {
                 result.AddClaim(new(ClaimTypes.Role, role));

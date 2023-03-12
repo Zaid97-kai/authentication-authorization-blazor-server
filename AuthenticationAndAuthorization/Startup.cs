@@ -36,7 +36,6 @@ namespace AuthenticationAndAuthorization
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<SimulatedDataProviderService>();
             services.AddScoped<WebsiteAuthenticator>();
             services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<WebsiteAuthenticator>());
             services.AddAuthorization(config =>

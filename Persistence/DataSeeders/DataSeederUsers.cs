@@ -13,6 +13,20 @@ namespace Persistence.DataSeeders
     {
         public static ModelBuilder SeedData(ModelBuilder modelBuilder)
         {
+            List<Role> Roles = new()
+            {
+                new()
+                {
+                    Id = 1,
+                    Name = "Admin"
+                },
+                new()
+                {
+                    Id = 2,
+                    Name = "User"
+                }
+            };
+
             List<User> Users = new()
             {
                 new()
@@ -41,6 +55,28 @@ namespace Persistence.DataSeeders
                 }
             };
 
+            List<UsersRole> UsersRoles = new()
+            {
+                new()
+                {
+                    Id = 1,
+                    UserId = Users[0].Id,
+                    RoleId = Roles[0].Id
+                },
+                new()
+                {
+                    Id = 2,
+                    UserId = Users[0].Id,
+                    RoleId = Roles[1].Id
+                },
+                new()
+                {
+                    Id = 3,
+                    UserId = Users[1].Id,
+                    RoleId = Roles[1].Id
+                },
+            };
+
             List<Toy> Toys = new()
             {
                 new()
@@ -57,7 +93,9 @@ namespace Persistence.DataSeeders
                 }
             };
 
+            modelBuilder.Entity<Role>().HasData(Roles);
             modelBuilder.Entity<User>().HasData(Users);
+            modelBuilder.Entity<UsersRole>().HasData(UsersRoles);
             modelBuilder.Entity<Toy>().HasData(Toys);
 
             return modelBuilder;

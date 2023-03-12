@@ -15,5 +15,7 @@ namespace Persistence.Entities
         public int Age { get; set; }
 
         public bool IsPremiumMember { get; set; }
+
+        public virtual List<UsersRole>? UsersRoles { get; set; }
     }
 }

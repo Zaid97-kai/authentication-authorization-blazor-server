@@ -13,5 +13,9 @@ namespace Persistence.Context
         DbSet<Toy> Toys { get; set; }
 
         DbSet<User> Users { get; set; }
+
+        DbSet<Role> Roles { get; set; }
+
+        DbSet<UsersRole> UsersRoles { get; set; }
     }
 }
